@@ -27,7 +27,7 @@ if args.verbose:
 
 url = "https://newsapi.org/v2/everything"
 params = {
-    "q": "terrorist OR mass shooting OR bombing OR terrorism",
+    "q": "terrorist AND attack",
     "language": "en",
     "pageSize": 100,
     "sortBy": "publishedAt",
