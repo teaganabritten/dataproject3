@@ -1,0 +1,5 @@
+2025-12-01 15:32:56,201 - INFO - Connected to DuckDB instance for analysis
+2025-12-01 15:32:56,230 - INFO - Imported 221 records from news_articles table
+2025-12-01 15:33:00,553 - INFO - Word cloud generated and saved to title_wordcloud.png
+2025-12-01 15:33:01,168 - INFO - created source graph and exported file
+2025-12-01 15:33:02,097 - INFO - created keywords heatmap and exported file

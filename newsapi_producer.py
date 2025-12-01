@@ -26,7 +26,7 @@ def get_api_key(args) -> str:
 def fetch_articles(api_key: str, page_size: int = 20) -> List[dict]:
     url = "https://newsapi.org/v2/everything"
     params = {
-        "q": "terrorist OR attack OR mass shooting OR bombing OR terrorism",
+        "q": "terrorist OR mass shooting OR bombing OR terrorism",
         "language": "en",
         "pageSize": page_size,
         "sortBy": "publishedAt",
@@ -47,7 +47,7 @@ def main():
     parser.add_argument("--bootstrap", default=os.getenv("KAFKA_BOOTSTRAP", "localhost:9092"),
                         help="Kafka bootstrap servers (comma separated)")
     parser.add_argument("--topic", default="news-articles", help="Kafka topic to publish to")
-    parser.add_argument("--page-size", type=int, default=20, help="How many articles to fetch per request")
+    parser.add_argument("--page-size", type=int, default=100, help="How many articles to fetch per request")
     parser.add_argument("--interval", type=int, default=0, help="If >0, poll every N seconds")
     parser.add_argument("--key-field", default="url", help="Article field to use as message key (optional)")
     parser.add_argument("--verbose", action="store_true")
