@@ -21,6 +21,9 @@ os.makedirs("plots", exist_ok=True)
 # Task 1: Load Raw CSV
 @task
 def load_gtd_raw():
+    """
+    Loads the raw GTD CSV into a DuckDB table
+    """
     logger = get_run_logger()
     logger.info("Starting the Loading Task...")
 
@@ -69,6 +72,11 @@ def load_gtd_raw():
 # Task 2: Clean & CAST
 @task
 def clean_data():
+    """
+    Typecasting 
+    Removes rows missing lat/long
+    Produces clean, analysis-ready table
+    """
     logger = get_run_logger()
     logger.info("Starting Cleaning Task...")
 
@@ -78,6 +86,7 @@ def clean_data():
 
         logger.info("Cleaning and Transforming Data...")
 
+        #Making sure to alias after typecasting
         conn.execute("""
             CREATE TABLE gtd_clean AS
             SELECT
@@ -117,12 +126,23 @@ def clean_data():
 # Task 3: Analysis + Graph Export
 @task
 def analyze_data():
+    """
+    Generates Visualization 
+    - Time series (incidents & fatalities)
+    - Categorical breakdowns (attack types, regions, countries)
+    - Terrorist-group lethality analysis
+    - Attack-type × target-type co-occurrence heatmap
+    - KDE-based geospatial density map
+    - Bubble chart showing temporal evolution of attack types
+    - Word cloud summarizing textual attack summaries
+    """
     logger = get_run_logger()
     logger.info("Starting the Analysis step...")
 
     try:
         conn = duckdb.connect("gtd.duckdb")
 
+        # Time Series: Incidents Per Year
         df_year = conn.execute("""
             SELECT iyear, COUNT(*) AS count
             FROM gtd_clean
@@ -139,6 +159,7 @@ def analyze_data():
         plt.savefig("plots/incidents_over_time.png")
         plt.close()
 
+        # Time Series: Fatalities
         df_fatal = conn.execute("""
             SELECT iyear, SUM(COALESCE(nkill,0)) AS fatalities
             FROM gtd_clean
@@ -155,6 +176,7 @@ def analyze_data():
         plt.savefig("plots/fatalities_over_time.png")
         plt.close()
 
+        # Attack Type Distribution
         df_attack = conn.execute("""
             SELECT attacktype1_txt AS attack, COUNT(*) AS count
             FROM gtd_clean
@@ -169,6 +191,7 @@ def analyze_data():
         plt.savefig("plots/attack_type_breakdown.png")
         plt.close()
 
+        # Regional Breakdown
         df_region = conn.execute("""
             SELECT region_txt AS region, COUNT(*) AS count
             FROM gtd_clean
@@ -183,6 +206,7 @@ def analyze_data():
         plt.savefig("plots/incidents_by_region.png")
         plt.close()
 
+        # Top 15 Countries
         df_country = conn.execute("""
             SELECT country_txt AS country, COUNT(*) AS count
             FROM gtd_clean
@@ -198,6 +222,7 @@ def analyze_data():
         plt.savefig("plots/top_countries.png")
         plt.close()
 
+        # Danger Terrorist Groups
         df_groups = conn.execute("""
             SELECT gname AS group_name, SUM(COALESCE(nkill,0)) AS kills
             FROM gtd_clean
@@ -214,8 +239,7 @@ def analyze_data():
         plt.savefig("plots/deadliest_groups.png")
         plt.close()
 
-        
-
+        # Attack × Target Heatmap
         df_attack_target = conn.execute("""
             SELECT attacktype1_txt AS attack, targtype1_txt AS target, COUNT(*) AS count
             FROM gtd_clean
@@ -231,7 +255,7 @@ def analyze_data():
         plt.savefig("plots/attack_target_heatmap.png")
         plt.close()
 
-
+        # Geographic KDE Heatmap
         df_loc = conn.execute("""
             SELECT latitude, longitude
             FROM gtd_clean
@@ -250,7 +274,7 @@ def analyze_data():
         plt.savefig("plots/global_heatmap.png")
         plt.close()
 
-        
+        # Bubble Chart: Attack Type Across Time    
         df_attack_year= conn.execute("""
             SELECT iyear, attacktype1_txt AS attack, 
                    COUNT(*) AS incidents, 
@@ -281,6 +305,7 @@ def analyze_data():
         plt.close()
 
 
+        # Word Cloud: Attack Summaries
         from wordcloud import WordCloud
 
         df_summary = conn.execute("""
@@ -310,6 +335,11 @@ def analyze_data():
 # Main Flow
 @flow
 def gtd_flow():
+    """
+    1. Load raw data
+    2. Clean and prepare analytical dataset
+    3. Execute all analyses and write plots to plots folder
+    """
     load_gtd_raw()
     clean_data()
     analyze_data()
