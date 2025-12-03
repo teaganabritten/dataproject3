@@ -1,23 +1,24 @@
 # Global Terrorism Database (GTD) ETL and Analysis Pipeline
 ## Overview
 This project implements a complete ETL and analytical workflow for the Global Terrorism Database (GTD). The pipeline is orchestrated with Prefect and includes raw data ingestion, cleaning, transformation, storage in DuckDB, and generation of analytical visualizations.
- A separate Streamlit dashboard is provided for interactive exploration using a smaller sample of the dataset for faster performance.
+A separate Streamlit dashboard is provided for interactive exploration using a smaller sample of the dataset for faster performance.
 In addition to the historical dataset, the project incorporates a real-time component using the NewsAPI. A Kafka producer periodically retrieves current news articles related to terrorism, while a Kafka consumer streams these articles into DuckDB for storage and analysis. This allows for a meaningful comparison between long-term, data-driven terrorism trends (GTD) and present-day media coverage patterns captured from live news feeds.
 
 ## Data Source
 ### Global Terrorism Database (GTD):
- https://www.start.umd.edu/data-tools/GTD
+https://www.start.umd.edu/data-tools/GTD
 Codebook (under “GTD Codebook”):
- https://www.start.umd.edu/using-gtd
+https://www.start.umd.edu/using-gtd
 ### Variables Used
 eventid, iyear, imonth, iday, country_txt, region_txt, provstate, city,
- latitude, longitude, attacktype1_txt, targtype1_txt, weaptype1_txt, gname,
- nkill, nwound, success, suicide, multiple, individual, summary
+latitude, longitude, attacktype1_txt, targtype1_txt, weaptype1_txt, gname,
+nkill, nwound, success, suicide, multiple, individual, summary
 Project Structure
 *Note: Please run the prefect_gtd.py file first then the gtd_dashboard.py
 ## 1. Prefect ETL and Analysis (prefect_gtd.py)
 This script executes the full ETL pipeline on the complete GTD dataset (approximately 200,000 rows).
- It includes the following components:
+It includes the following components:
+
 • Loading the raw GTD CSV into DuckDB
 
 • Cleaning and transforming the dataset (type casting, filtering invalid coordinates, removing malformed entries)
@@ -32,7 +33,8 @@ DuckDB is used due to its high performance for analytical workloads and its abil
 
 ## 2. Streamlit Dashboard (gtd_dashboard.py)
 A Streamlit dashboard was created using a randomly sampled subset of 20,000 records.
- This subset enables:
+This subset enables:
+
 • Fast loading and smooth interaction
 
 • Real-time filtering and visualization
@@ -42,7 +44,8 @@ A Streamlit dashboard was created using a randomly sampled subset of 20,000 reco
 The dashboard includes maps, charts, filters, KPIs, and interactive exploratory tools.
 ## 3. NewsAPI Streaming and Analysis (newsdataanalysis.py)
 This component integrates real-time news data into the project.
- Key elements include:
+Key elements include:
+
 • Periodic collection of live news articles related to terrorism using the NewsAPI
 
 • A Kafka-based producer that fetches articles multiple times per day and streams them into a Kafka topic
