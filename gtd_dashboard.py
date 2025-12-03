@@ -32,7 +32,6 @@ country_filter = st.sidebar.selectbox(
 attack_filter = st.sidebar.selectbox("Attack Type", get_filter_options("attacktype1_txt"))
 group_filter = st.sidebar.selectbox("Terrorist Group", get_filter_options("gname"))
 
-
 # Load filtered data
 def load_filtered_data(year_range, region, country, attack, group, limit=20000):
     query = f"""
@@ -73,7 +72,7 @@ col1.metric("Total Incidents", len(df))
 col2.metric("Total Fatalities", int(df['nkill'].sum()) if not df.empty else 0)
 col3.metric("Total Injuries", int(df['nwound'].sum()) if not df.empty else 0)
 
-#Animated Map (Cumulative)
+# Animated Map (Cumulative)
 st.subheader("Terrorism Map (Cumulative Animation)")
 if not df.empty:
     cumulative_df = pd.DataFrame()
@@ -95,7 +94,7 @@ if not df.empty:
         height=600
     )
     fig_map.update_layout(mapbox_style="carto-positron")
-    st.plotly_chart(fig_map, use_container_width=True)
+    st.plotly_chart(fig_map, width="stretch")
 
 st.subheader("Incidents Over Time (Cumulative)")
 if not df.empty:
@@ -116,7 +115,7 @@ if not df.empty:
         title="Cumulative Incidents Over Time"
     )
     fig_time_line.update_layout(xaxis=dict(categoryorder='category ascending'))
-    st.plotly_chart(fig_time_line, use_container_width=True)
+    st.plotly_chart(fig_time_line, width="stretch")
 
 # Attack Type Breakdown
 st.subheader("Attack Type Breakdown")
@@ -131,7 +130,7 @@ if not df.empty:
         color_continuous_scale='Reds',
         title="Attack Type Frequency"
     )
-    st.plotly_chart(fig_attack, use_container_width=True)
+    st.plotly_chart(fig_attack, width="stretch")
 
 # Incidents by Region
 st.subheader("Incidents by Region")
@@ -145,7 +144,7 @@ if not df.empty:
         color_continuous_scale='OrRd',
         title="Incidents by Region"
     )
-    st.plotly_chart(fig_region, use_container_width=True)
+    st.plotly_chart(fig_region, width="stretch")
 
 # Incidents by Country
 st.subheader("Incidents by Country")
@@ -159,8 +158,7 @@ if not df.empty:
         color_continuous_scale='OrRd',
         title="Incidents by Country"
     )
-    st.plotly_chart(fig_country, use_container_width=True)
-
+    st.plotly_chart(fig_country, width="stretch")
 
 # Bubble Chart: Attack Trends vs Fatalities
 st.subheader("Attack Trends: Frequency vs Fatalities")
@@ -179,7 +177,7 @@ if not df.empty:
         size_max=40,
         title="Attack Type Trends Over Time: Size=Fatalities, Color=Incidents"
     )
-    st.plotly_chart(fig_bubble, use_container_width=True)
+    st.plotly_chart(fig_bubble, width="stretch")
 
 # Heatmap: Attack Type vs Target Type
 st.subheader("Attack Type vs Target Type Heatmap")
@@ -194,10 +192,9 @@ if not df.empty:
         color_continuous_scale='YlGnBu',
         title="Attack Type vs Target Type"
     )
-    st.plotly_chart(fig_heatmap, use_container_width=True)
+    st.plotly_chart(fig_heatmap, width="stretch")
 
-
-#Word Cloud: Attack Summaries
+# Word Cloud
 st.subheader("Common Words in Attack Summaries")
 if not df.empty:
     text = " ".join(df['summary'].dropna().astype(str).tolist())

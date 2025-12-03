@@ -1,4 +1,5 @@
 .env
-.duckdb
+*.duckdb
 newsdataanalysis.ipynb
-
+*.xlsx
+*.csv
