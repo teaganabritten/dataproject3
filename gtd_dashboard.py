@@ -9,7 +9,7 @@ st.set_page_config(layout="wide", page_title="Global Terrorism Dashboard")
 
 # Database connection
 def get_duckdb_connection():
-    return duckdb.connect("gtd.duckdb", read_only=True)
+    return duckdb.connect("gtd_data.db", read_only=True)
 
 con = get_duckdb_connection()
 
@@ -203,3 +203,5 @@ if not df.empty:
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis("off")
     st.pyplot(plt)
+
+con.close()
