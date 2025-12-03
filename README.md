@@ -82,4 +82,6 @@ The pipeline produces a range of analytical figures, including:
 
 • Heatmap of keyword frequencies in news article titles
 
+## Streamlit Dashboard: https://teaganabritten-dataproject3-gtd-dashboard-vbrkcv.streamlit.app/
+
 
