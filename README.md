@@ -61,6 +61,7 @@ Key elements include:
 This real-time component allows comparison between historical terrorism patterns (GTD) and current media reporting.
 ## Visualizations Generated
 The pipeline produces a range of analytical figures, including:
+
 • Time series for incident counts and fatalities
 
 • Attack-type distributions and regional breakdowns
