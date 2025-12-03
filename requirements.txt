@@ -8,3 +8,5 @@ seaborn>=0.12
 plotly
 wordcloud>=1.8
 streamlit>=1.25
+argparse
+signal
